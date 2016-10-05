@@ -1,0 +1,24 @@
+{
+  "name": "message-board-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/donbobvanbirt/message-board-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/donbobvanbirt/message-board-backend/issues"
+  },
+  "homepage": "https://github.com/donbobvanbirt/message-board-backend#readme",
+  "dependencies": {
+    "body": "^5.1.0"
+  }
+}
