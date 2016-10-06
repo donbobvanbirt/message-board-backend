@@ -11,6 +11,7 @@ const filename = 'messages.json';
 
 const server = http.createServer((req, res) => {
   anyBody(req, (err, body) => {
+    let { author, text } = body;
     let { url, method } = req;
     let urlPath = url.split('/');
 
@@ -51,7 +52,6 @@ const server = http.createServer((req, res) => {
           fs.readFile(filename, (err, buffer) => {
             let messagesStr = JSON.parse(buffer);
             let messages = JSON.parse(messagesStr);
-            let { author, text } = body;
 
             if(author && text) {
               body.id = uuid();
@@ -97,6 +97,55 @@ const server = http.createServer((req, res) => {
         }
 
         break;
+
+// -------------------------- // Update message // -------------------------- //
+      case 'PUT':
+
+      if (urlPath[1] === 'messages' && urlPath[2]) {
+        fs.readFile(filename, (err, buffer) => {
+          let messagesStr = JSON.parse(buffer);
+          let messages = JSON.parse(messagesStr);
+          let updatedMessage = {};
+
+          let oldMessage = messages.filter(message => {
+            return message.id === urlPath[2]
+          })
+
+          let messagesMinus = messages.filter(message => {
+            return message.id !== urlPath[2]
+          })
+
+          // let { author, text, id } = oldMessage[0];
+
+          if(author) {
+            updatedMessage.author = author;
+          } else {
+            updatedMessage.author = oldMessage[0].author;
+          }
+          if(text) {
+            updatedMessage.text = text;
+          } else {
+            updatedMessage.text = oldMessage[0].text;
+          }
+          updatedMessage.id = oldMessage[0].id;
+
+          console.log('updatedMessage:', updatedMessage);
+
+          messagesMinus.push( updatedMessage );
+
+          fs.writeFile(filename, JSON.stringify(JSON.stringify(messagesMinus)), err => {
+          })
+          res.end('message updated');
+
+        })
+
+      } else {
+        res.statusCode = 404;
+        res.end(`Not found`);
+      }
+
+        break;
+
 // -------------------------------- // --- // -------------------------------- //
       default:
         res.statusCode = 404;
