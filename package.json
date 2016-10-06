@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/donbobvanbirt/message-board-backend#readme",
   "dependencies": {
-    "body": "^5.1.0"
+    "body": "^5.1.0",
+    "uuid": "^2.0.3"
   }
 }
