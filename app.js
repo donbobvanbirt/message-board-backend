@@ -19,14 +19,26 @@ const server = http.createServer((req, res) => {
 // ---------------------------- Receive Messages ---------------------------- //
       case 'GET':
         // let urlPath = url.split('/');
+        let urlSplit = url.split(/\W/g);
+        // console.log('urlSplit', urlSplit);
 
-
-        if (urlPath[1] === 'messages') {
+        if (urlPath[1] === 'messages' || urlSplit[1] === 'messages') {
           fs.readFile(filename, (err, buffer) => {
             let messagesStr = JSON.parse(buffer);
             let messages = JSON.parse(messagesStr);
 
-            if(urlPath[2]) {
+            if(urlSplit[2] === 'sort') {
+              // console.log('urlSplit[3]', urlSplit[3]);
+              const sortBy = urlSplit[3];
+              let sortedMessages = messages.sort((a, b) => {
+                console.log('a.sortBy', a[sortBy]);
+                return (a[sortBy] > b[sortBy]) ? 1 : ((b[sortBy] > a[sortBy]) ? -1 : 0);
+
+              })
+              res.end(JSON.stringify(sortedMessages));
+
+            } else if(urlPath[2]) {
+              console.log(urlPath[2])
               let message = messages.filter(message => {
                 return message.id === urlPath[2]
               })
@@ -47,7 +59,7 @@ const server = http.createServer((req, res) => {
 // ----------------------------- Add new message ----------------------------- //
       case 'POST':
 
-        if(url === '/messages') {
+        if(urlPath[1] === 'messages') {
 
           fs.readFile(filename, (err, buffer) => {
             let messagesStr = JSON.parse(buffer);
